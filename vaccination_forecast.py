@@ -63,7 +63,7 @@ def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplie
 
 
 def forecast(days_to_forecast: int, vaccinated: List[VaccinationRecord],
-             second_shot_portion=0.1,
+             second_shot_portion=0.0,
              second_dosage_interval=90,
              pfizer_multiplier=1,
              moderna_multiplier=1) -> List[VaccinationRecord]:
@@ -73,6 +73,7 @@ def forecast(days_to_forecast: int, vaccinated: List[VaccinationRecord],
     We ignore the 1.8% or so of the population that already has two shots by assuming that no one has (too pessimistic)
     We assume that everyone has had their shot just before forecasting starts so their second shot is long away (too optimistic)
     We ignore one-shot vaccines like Johnson&Johnson for now (too pessimistic)
+    We ignore vaccines that we know nothing of delivery (too pessimistic)
     :param second_shot_portion: At most what portion of shots will be given to second shot
     :param days_to_forecast: How many days we forecast?
     :param vaccinated: history information on vaccinations
