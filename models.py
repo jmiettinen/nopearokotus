@@ -27,3 +27,21 @@ shots_for_all = {
     "second_dose": 180
 }
 
+facts = {
+    "population": {
+        "adult": 4475327,
+        "all": 5524384,
+        "children": 1049057
+    },
+    "targets": {
+        "eu": {},
+        "herd immunity": {}
+    }
+}
+
+facts["targets"]["eu"] = int(facts["population"]["adult"] * 0.7)
+facts["targets"]["herd immunity"] = {
+    "smallpox": int(facts["population"]["all"] * 0.86),
+    "covid": int(facts["population"]["all"] * 0.75)
+}
+

@@ -9,8 +9,6 @@ from fetch_data import fetch_vaccination_data
 from models import current_usage, shots_for_all, third_dosage, half_dosage
 from vaccination_forecast import forecast
 
-pd.date_range("1/1/2000", periods=1000)
-
 
 def plot_results(timeseries: Dict[str, List[int]], dates: List[datetime], output_filename: str) -> None:
     col_names: List[str] = []
@@ -20,8 +18,8 @@ def plot_results(timeseries: Dict[str, List[int]], dates: List[datetime], output
         cols.append(v)
     cols = list(map(list, zip(*cols)))
     df = pd.DataFrame(cols, index=dates, columns=col_names)
-    plot = df.plot()
-    plot.get_figure().savefig(output_filename)
+    plot = df.plot(ylim=[0, 6_000_000], figsize=(12, 8))
+    plot.get_figure().savefig(output_filename, dpi=300)
 
 
 def main():
@@ -44,7 +42,7 @@ def main():
         dates = [x.date for x in forecasted_data]
 
     import os
-    os.makedirs("out")
+    os.makedirs("out", exist_ok=True)
     plot_results(timeseries, dates, "out/tmp.png")
 
 
