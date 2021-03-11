@@ -9,5 +9,7 @@ ja tämä kahdella kuvaajalla (toinen annos 3kk päästä tai sitten joskus).
 
 ## Joitain vastalauseita
 
+Käytännön ongelmat pienemmän rokoteannoksen antamisen suhteen? Olisivatko nämä ratkaistavissa?
+
 ## Viitteet
 
