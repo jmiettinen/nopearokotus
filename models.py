@@ -28,6 +28,7 @@ shots_for_all = {
 }
 
 facts = {
+    # https://findikaattori.fi/fi/table/14
     "population": {
         "adult": 4475327,
         "all": 5524384,
@@ -39,9 +40,17 @@ facts = {
     }
 }
 
-facts["targets"]["eu"] = int(facts["population"]["adult"] * 0.7)
-facts["targets"]["herd immunity"] = {
-    "smallpox": int(facts["population"]["all"] * 0.86),
-    "covid": int(facts["population"]["all"] * 0.75)
-}
-
+targets = [
+    {
+        "target": int(facts["population"]["adult"] * 0.7),
+        "name": "EU:n suosittelema 70% aikuisväestöstä"
+    },
+    {
+        "target": int(facts["population"]["all"] * 0.86),
+        "name": "Isorokon laumasuoja"
+    },
+    {
+        "target": int(facts["population"]["all"] * 0.75),
+        "name": "Arvio COVID-19 laumasuojasta"
+    }
+]

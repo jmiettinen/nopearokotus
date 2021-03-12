@@ -1,16 +1,19 @@
 from datetime import datetime
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from fetch_data import fetch_vaccination_data
-from models import current_usage, shots_for_all, third_dosage, half_dosage
+from models import current_usage, shots_for_all, third_dosage, half_dosage, targets
 from vaccination_forecast import forecast
 
 
-def plot_results(timeseries: Dict[str, List[int]], dates: List[datetime], output_filename: str) -> None:
+def plot_results(timeseries: Dict[str, List[int]],
+                 dates: List[datetime],
+                 output_filename: str,
+                 targets_and_labels: List[Tuple[str, int]] = []) -> None:
     col_names: List[str] = []
     cols: List[List[int]] = []
     for k, v in timeseries.items():
@@ -43,7 +46,8 @@ def main():
 
     import os
     os.makedirs("out", exist_ok=True)
-    plot_results(timeseries, dates, "out/tmp.png")
+    target_list = [(x["name"], x["target"]) for x in targets]
+    plot_results(timeseries, dates, "out/tmp.png", target_list)
 
 
 if __name__ == "__main__":
