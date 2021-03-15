@@ -28,14 +28,14 @@ def plot_days_until_target(timeseries: Dict[str, List[float]],
 
 def plot_results(timeseries: Dict[str, List[float]],
                  dates: List[datetime],
-                 targets_and_labels: List[Tuple[str, int]] = []) -> fig.Figure:
+                 labels_and_targets: List[Tuple[str, int]] = []) -> fig.Figure:
     sns.set_theme(style="darkgrid")
     col_names: List[str] = []
     cols: List[List[float]] = []
     for k, v in timeseries.items():
         col_names.append(k)
         cols.append(v)
-    for k, v in targets_and_labels:
+    for k, v in labels_and_targets:
         col_names.append(k)
         tmp = [v for x in range(len(cols[0]))]
         cols.append(tmp)
@@ -49,7 +49,7 @@ def plot_results(timeseries: Dict[str, List[float]],
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
     ax.set_yticks([1_000_000, 2_000_000, 3_000_000, 4_000_000, 5_000_000, 6_000_000])
     ax.set_yticklabels(['1', '2', '3', '4', '5', '6'])
-    sns.lineplot(ax=ax, data=df, palette="tab10", linewidth=1.5, legend=col_names + [x[0] for x in targets_and_labels])
+    sns.lineplot(ax=ax, data=df, palette="tab10", linewidth=1.5, legend=col_names + [x[0] for x in labels_and_targets])
     ax.set_xlabel("Aika")
     ax.set_ylabel("Rokotettu väestö (miljoonaa)")
     return ax.figure

@@ -11,7 +11,7 @@ smaller_dosage = {
     "name": "P1.5_M2_90",
     "pfizer": (30.0 / 20.0),
     "moderna": 2,
-    "az": 1
+    "az": 1,
     "second_dose": 90
 }
 
@@ -27,7 +27,7 @@ shots_for_all = {
     "name": "P30_M2_180",
     "pfizer": 30,
     "moderna": 2,
-    "az": 1
+    "az": 1,
     "second_dose": 180
 }
 
