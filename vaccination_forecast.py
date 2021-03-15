@@ -68,7 +68,7 @@ def forecast(days_to_forecast: int,
              total_population: int,
              vaccinated: List[VaccinationRecord],
              second_shot_portion=0.0,
-             second_dosage_interval=90,
+             second_shot_interval=90,
              pfizer_multiplier=1,
              moderna_multiplier=1,
              az_multiplier=1) -> List[VaccinationRecord]:
@@ -83,7 +83,7 @@ def forecast(days_to_forecast: int,
     :param second_shot_portion: At most what portion of shots will be given to second shot
     :param days_to_forecast: How many days we forecast?
     :param vaccinated: history information on vaccinations
-    :param second_dosage_interval: How long a person wait before consuming another shot
+    :param second_shot_interval: How long a person wait before consuming another shot
     :param pfizer_multiplier: How many people will we vaccinate with one shot of Pfizer/BioNTech vaccine?
     :param moderna_multiplier: How many people will we vaccinate with one shot of Moderna vaccine?
     :param az_multiplier: How many people will we vaccinate with one shot of Astra-Zeneca vaccine?
@@ -97,7 +97,7 @@ def forecast(days_to_forecast: int,
 
     for x in range(1, days_to_forecast + 1, 1):
         today = last_date + timedelta(days=x)
-        first_shot_index = x - second_dosage_interval
+        first_shot_index = x - second_shot_interval
         needs_second_shot = 0 if first_shot_index < 0 else first_shot_only[first_shot_index]
         shots_for_today = total_shots_for_day(today,
                                               pfizer_multiplier=pfizer_multiplier,
