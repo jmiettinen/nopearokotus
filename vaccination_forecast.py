@@ -66,14 +66,14 @@ def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplie
 
 def need_second_vaccination_for(day_index: int, first_vaccinations: List[int]) -> int:
     total = 0
-    for i in range(day_index):
+    for i in range(day_index + 1):
         total += first_vaccinations[i]
     return total
 
 
 def mark_second_vaccination_done(day_index: int, first_vaccinations: List[int], vaccinated_count: int) -> None:
     left_mark_vaccinated = vaccinated_count
-    for i in range(day_index):
+    for i in range(day_index + 1):
         without_second_vaccination = first_vaccinations[i]
         day_uses_vaccinations = min(without_second_vaccination, left_mark_vaccinated)
         first_vaccinations[i] -= day_uses_vaccinations
@@ -118,9 +118,8 @@ def forecast(days_to_forecast: int,
     data: List[VaccinationRecord] = sorted(vaccinated, key=lambda x: x.date)
     last_date = data[-1].date
     first_shot_only = create_first_vaccination_list(vaccinated)
-    print(first_shot_only)
     sum_vaccinated = data[-1].amount
-    forecast_data: List[VaccinationRecord] = []
+    forecast_data: List[VaccinationRecord] = [data[-1]]
 
     for x in range(1, days_to_forecast + 1, 1):
         today = last_date + timedelta(days=x)
@@ -130,7 +129,6 @@ def forecast(days_to_forecast: int,
                                               pfizer_multiplier=pfizer_multiplier,
                                               moderna_multiplier=moderna_multiplier,
                                               az_multiplier=az_multiplier)
-        # Need to transform first_shot_only into other form.
         second_shots_delivered = min(int(second_shot_portion * shots_for_today), needs_second_shot)
         first_shots_delivered = shots_for_today - second_shots_delivered
         sum_vaccinated += first_shots_delivered
@@ -140,6 +138,7 @@ def forecast(days_to_forecast: int,
             sum_vaccinated = total_population
         mark_second_vaccination_done(first_shot_index, first_shot_only, second_shots_delivered)
         first_shot_only.append(first_shots_delivered)
+        print(f"{today.strftime('%Y-%m-%d')} First: {first_shots_delivered}, Second: {second_shots_delivered}/{needs_second_shot}")
         forecast_data.append(VaccinationRecord(today, sum_vaccinated))
 
     return forecast_data

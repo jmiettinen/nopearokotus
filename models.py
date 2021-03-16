@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from typing import Dict, List, Union
 
 no_az_usage = {
     "name": "Huonompi",
@@ -15,16 +17,16 @@ current_usage = {
     "second_dose": 90
 }
 
-smaller_dosage = {
-    "name": "Nopeampi #1",
-    "pfizer": (30.0 / 20.0),
-    "moderna": 2,
-    "az": 1,
-    "second_dose": 180
-}
+# smaller_dosage = {
+#     "name": "Nopeampi #1",
+#     "pfizer": (30.0 / 20.0),
+#     "moderna": 2,
+#     "az": 1,
+#     "second_dose": 180
+# }
 
 third_dosage = {
-    "name": "Nopeampi #2",
+    "name": "Nopeampi #1",
     "pfizer": 3,
     "moderna": 2,
     "az": 1,
@@ -32,7 +34,7 @@ third_dosage = {
 }
 
 shots_for_all = {
-    "name": "Nopeampi #3",
+    "name": "Nopeampi #2",
     "pfizer": 30,
     "moderna": 2,
     "az": 1,
@@ -48,17 +50,28 @@ facts = {
     }
 }
 
-targets = [
-    {
-        "target": int(facts["population"]["adult"] * 0.7),
-        "name": "EU:n suosittelema 70% aikuisväestöstä"
-    },
+
+@dataclass(frozen=True)
+class Target:
+    name: str
+    value: int
+
+
+targets: List[Target] = [
+    Target(
+        name="EU:n suosittelema 70% aikuisväestöstä",
+        value=int(facts["population"]["adult"] * 0.7)
+    ),
+    Target(
+        name="Kaikki aikuiset",
+        value=facts["population"]["adult"]
+    ),
     # {
     #     "target": int(facts["population"]["all"] * 0.86),
     #     "name": "Isorokon laumasuoja"
     # },
-    {
-        "target": int(facts["population"]["all"] * 0.75),
-        "name": "Arvio COVID-19 laumasuojasta"
-    }
+    # Target(
+    #     name="COVID-19 laumasuoja (arvio)",
+    #     value=int(facts["population"]["all"] * 0.75)
+    # )
 ]
