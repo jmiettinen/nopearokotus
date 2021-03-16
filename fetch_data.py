@@ -11,7 +11,7 @@ VACCINATION_URL = "https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/f
 @dataclass(frozen=True)
 class VaccinationRecord:
     date: datetime
-    amount: float
+    amount: int
 
 
 def fetch_vaccination_data() -> List[VaccinationRecord]:

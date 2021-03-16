@@ -64,6 +64,32 @@ def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplie
     return int(total)
 
 
+def need_second_vaccination_for(day_index: int, first_vaccinations: List[int]) -> int:
+    total = 0
+    for i in range(day_index):
+        total += first_vaccinations[i]
+    return total
+
+
+def mark_second_vaccination_done(day_index: int, first_vaccinations: List[int], vaccinated_count: int) -> None:
+    left_mark_vaccinated = vaccinated_count
+    for i in range(day_index):
+        without_second_vaccination = first_vaccinations[i]
+        day_uses_vaccinations = min(without_second_vaccination, left_mark_vaccinated)
+        first_vaccinations[i] -= day_uses_vaccinations
+        left_mark_vaccinated -= day_uses_vaccinations
+
+    if left_mark_vaccinated > 0:
+        raise Exception(f"Should have marked all vaccines used, {left_mark_vaccinated} still left. Inconsistency!")
+
+
+def create_first_vaccination_list(vaccinated: List[VaccinationRecord]) -> List[int]:
+    first_shots_only = [x.amount for x in vaccinated]
+    for i in reversed(range(1, len(first_shots_only))):
+        first_shots_only[i] -= first_shots_only[i-1]
+    return first_shots_only
+
+
 def forecast(days_to_forecast: int,
              total_population: int,
              vaccinated: List[VaccinationRecord],
@@ -91,14 +117,15 @@ def forecast(days_to_forecast: int,
     """
     data: List[VaccinationRecord] = sorted(vaccinated, key=lambda x: x.date)
     last_date = data[-1].date
-    first_shot_only = [x.amount for x in vaccinated]
+    first_shot_only = create_first_vaccination_list(vaccinated)
+    print(first_shot_only)
     sum_vaccinated = data[-1].amount
     forecast_data: List[VaccinationRecord] = []
 
     for x in range(1, days_to_forecast + 1, 1):
         today = last_date + timedelta(days=x)
         first_shot_index = x - second_shot_interval
-        needs_second_shot = 0 if first_shot_index < 0 else first_shot_only[first_shot_index]
+        needs_second_shot = 0 if first_shot_index < 0 else need_second_vaccination_for(first_shot_index, first_shot_only)
         shots_for_today = total_shots_for_day(today,
                                               pfizer_multiplier=pfizer_multiplier,
                                               moderna_multiplier=moderna_multiplier,
@@ -111,8 +138,9 @@ def forecast(days_to_forecast: int,
             first_shots_delivered -= sum_vaccinated - total_population
             second_shots_delivered = min(needs_second_shot, shots_for_today - first_shots_delivered)
             sum_vaccinated = total_population
+        mark_second_vaccination_done(first_shot_index, first_shot_only, second_shots_delivered)
         first_shot_only.append(first_shots_delivered)
-        forecast_data.append(VaccinationRecord(today, float(sum_vaccinated)))
+        forecast_data.append(VaccinationRecord(today, sum_vaccinated))
 
     return forecast_data
 

@@ -100,7 +100,7 @@ def fetch_data_for_main():
                                    second_shot_portion=0.4,
                                    pfizer_multiplier=param["pfizer"], moderna_multiplier=param["moderna"],
                                    az_multiplier=param["az"])
-        timeseries[param["name"]] = [x.amount for x in forecasted_data]
+        timeseries[param["name"]] = [float(x.amount) for x in forecasted_data]
         dates = [x.date for x in forecasted_data]
     return timeseries, dates, targets
 
