@@ -40,6 +40,7 @@ def plot_days_until_target(timeseries: Dict[str, List[float]],
     grid.set_axis_labels("Käytäntö", "Päivää")
     grid.set_titles("Tavoite: {col_name}")
     for row, name in enumerate(grid.col_names):
+        # Hackety hackety hack to find the relevant data to annotate results
         treatment_data = df.query(f"target == '{name}'")
         ax = grid.facet_axis(0, row)
         for i, days in enumerate(treatment_data["days"]):
