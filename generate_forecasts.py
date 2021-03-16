@@ -11,10 +11,10 @@ def fetch_data_for_main(forecast_length: int = 270) -> Tuple[Dict[str, List[floa
 
     data = fetch_vaccination_data()
     parameters = [
-        no_az_usage,
-        current_usage,
+        shots_for_all,
         third_dosage,
-        shots_for_all
+        current_usage,
+        no_az_usage,
     ]
     timeseries: Dict[str, List[float]] = {}
     dates: List[datetime] = []
