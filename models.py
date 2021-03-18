@@ -17,6 +17,14 @@ current_usage = {
     "second_dose": 90
 }
 
+first_doses_first = {
+    "name": "First doses first",
+    "pfizer": 1,
+    "moderna": 1,
+    "az": 1,
+    "second_dose": 180
+}
+
 # smaller_dosage = {
 #     "name": "Nopeampi #1",
 #     "pfizer": (30.0 / 20.0),

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 
-from models import Target
+from models import Target, first_doses_first
 
 
 def fetch_data_for_main(forecast_length: int = 270) -> Tuple[Dict[str, List[float]], List[datetime], List[Target]]:
@@ -13,6 +13,7 @@ def fetch_data_for_main(forecast_length: int = 270) -> Tuple[Dict[str, List[floa
     parameters = [
         shots_for_all,
         third_dosage,
+        first_doses_first,
         current_usage,
         no_az_usage,
     ]
@@ -40,7 +41,7 @@ def main():
     timeseries, dates, targets = fetch_data_for_main(400)
 
     target: Target
-    print("Rokotustapa      Ero Tavoite saavutettu")
+    print("Rokotustapa           Ero Tavoite saavutettu")
     for target in targets:
         print()
         print(target.name)
@@ -49,7 +50,7 @@ def main():
         for name_and_date in dates_for_target:
             diff_to_baseline = (name_and_date[1] - baseline_date).days
             date_as_string = name_and_date[1].strftime("%Y-%m-%d")
-            formatted = "{:15} {:4} {}".format(name_and_date[0], diff_to_baseline, date_as_string)
+            formatted = "{:20} {:4} {}".format(name_and_date[0], diff_to_baseline, date_as_string)
             print(formatted)
 
 

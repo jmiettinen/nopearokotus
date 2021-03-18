@@ -81,12 +81,12 @@ def plot_results(timeseries: Dict[str, List[float]],
 
 
 def main():
-    timeseries, dates, targets = fetch_data_for_main()
+    timeseries, dates, targets = fetch_data_for_main(365)
     import os
     os.makedirs("out", exist_ok=True)
     target_list = [(x.name, x.value) for x in targets]
-    plot_results(timeseries, dates, target_list).savefig("out/tmp.png", dpi=300)
-    plot_days_until_target(timeseries, dates, target_list).savefig("out/tmp_2.png", dpi=300)
+    plot_results(timeseries, dates, target_list).savefig("out/tmp.png", dpi=200)
+    plot_days_until_target(timeseries, dates, target_list).savefig("out/tmp_2.png", dpi=200)
 
 
 if __name__ == "__main__":
