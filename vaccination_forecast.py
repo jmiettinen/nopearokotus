@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Dict, List, Tuple
+from typing import Dict, List
+
 from dateutil.parser import parse
 
 from fetch_data import VaccinationRecord, fetch_vaccination_data
@@ -139,7 +140,7 @@ def forecast(days_to_forecast: int,
             sum_vaccinated = total_population
         mark_second_vaccination_done(first_shot_index, first_shot_only, second_shots_delivered)
         first_shot_only.append(first_shots_delivered)
-        #print(f"{today.strftime('%Y-%m-%d')} First: {first_shots_delivered}, Second: {second_shots_delivered}/{needs_second_shot}")
+        # print(f"{today.strftime('%Y-%m-%d')} First: {first_shots_delivered}, Second: {second_shots_delivered}/{needs_second_shot}")
         forecast_data.append(VaccinationRecord(today, sum_vaccinated))
 
     return forecast_data
