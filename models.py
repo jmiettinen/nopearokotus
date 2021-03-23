@@ -1,5 +1,8 @@
 from dataclasses import dataclass
-from typing import Dict, List, Union
+from datetime import datetime
+from typing import Dict, List
+
+from dateutil.parser import parse
 
 no_az_usage = {
     "name": "Huonompi",
@@ -83,3 +86,29 @@ targets: List[Target] = [
     #     value=int(facts["population"]["all"] * 0.75)
     # )
 ]
+
+
+@dataclass(frozen=True)
+class WeeklyDeliveryDate:
+    start: datetime
+    end: datetime
+    rate: int
+
+
+_far_future = parse("2100-04-01T00:00:00.000Z")
+
+weekly_delivery_per_vaccine: Dict[str, List[WeeklyDeliveryDate]] = {
+    "pfizer": [
+        WeeklyDeliveryDate(parse("2021-03-01T00:00:00.000Z"), parse("2021-03-31T23:59:59.999Z"), 60_000),
+        WeeklyDeliveryDate(parse("2021-04-01T00:00:00.000Z"), _far_future, 160_000)
+    ],
+    "moderna": [
+        WeeklyDeliveryDate(parse("2021-03-01T00:00:00.000Z"), _far_future, 10_000),
+    ],
+    "az": [
+        WeeklyDeliveryDate(parse("2021-03-01T00:00:00.000Z"), _far_future, 40_000),
+    ],
+    "j&j": [
+        WeeklyDeliveryDate(parse("2021-03-01T00:00:00.000Z"), _far_future, 0),
+    ],
+}
