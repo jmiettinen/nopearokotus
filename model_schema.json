@@ -1,0 +1,14 @@
+{
+  "definitions": {
+    "delivery_schedule": {
+      "start": "string",
+      "end": "string",
+      "rate": "int"
+    }
+  },
+  "type": "object",
+  "properties": {
+
+  },
+  "required": ["foo"]
+}

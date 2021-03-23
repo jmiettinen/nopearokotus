@@ -8,7 +8,7 @@ from fetch_data import VaccinationRecord, fetch_vaccination_data
 from models import WeeklyDeliveryDate, weekly_delivery_per_vaccine
 
 
-def dosage_for_day(day: datetime) -> Dict[str, int]:
+def dosage_for_day(day: datetime, weekly_delivery_per_vaccine: Dict[str, List[WeeklyDeliveryDate]]) -> Dict[str, int]:
     dosage = {
         "pfizer": 0,
         "moderna": 0,
@@ -25,8 +25,8 @@ def dosage_for_day(day: datetime) -> Dict[str, int]:
     return dosage
 
 
-def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplier: int, az_multiplier: int) -> int:
-    dosage: Dict[str, int] = dosage_for_day(day)
+def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplier: int, az_multiplier: int, weekly_delivery_per_vaccine: Dict[str, List[WeeklyDeliveryDate]]) -> int:
+    dosage: Dict[str, int] = dosage_for_day(day, weekly_delivery_per_vaccine)
     total = 0
     for k, v in dosage.items():
         if k == "pfizer":
@@ -66,14 +66,9 @@ def create_first_vaccination_list(vaccinated: List[VaccinationRecord]) -> List[i
     return first_shots_only
 
 
-def forecast(days_to_forecast: int,
-             total_population: int,
-             vaccinated: List[VaccinationRecord],
-             second_shot_portion=0.0,
-             second_shot_interval=90,
-             pfizer_multiplier=1,
-             moderna_multiplier=1,
-             az_multiplier=1) -> List[VaccinationRecord]:
+def forecast(days_to_forecast: int, total_population: int, vaccinated: List[VaccinationRecord], second_shot_portion=0.0,
+             second_shot_interval=90, pfizer_multiplier=1, moderna_multiplier=1, az_multiplier=1,
+             vaccine_deliveries=None) -> List[VaccinationRecord]:
     """
     Potentially incorrect assumptions and their effects:
     Vaccinations are uniformly distributed over all seven days of the week (too optimistic)
@@ -81,6 +76,7 @@ def forecast(days_to_forecast: int,
     We assume that everyone has had their shot just before forecasting starts so their second shot is long away (too optimistic)
     We ignore one-shot vaccines like Johnson&Johnson for now (too pessimistic)
     We ignore vaccines that we know nothing of delivery (too pessimistic)
+    :param vaccine_deliveries:
     :param total_population: How many people we can vaccinate at most
     :param second_shot_portion: At most what portion of shots will be given to second shot
     :param days_to_forecast: How many days we forecast?
@@ -97,6 +93,8 @@ def forecast(days_to_forecast: int,
     sum_vaccinated = data[-1].amount
     forecast_data: List[VaccinationRecord] = [data[-1]]
     history_shots_offset = len(first_shot_only)
+    if vaccine_deliveries is None:
+        vaccine_deliveries = weekly_delivery_per_vaccine
 
     for x in range(1, days_to_forecast + 1, 1):
         today = last_date + timedelta(days=x)
@@ -105,7 +103,8 @@ def forecast(days_to_forecast: int,
         shots_for_today = total_shots_for_day(today,
                                               pfizer_multiplier=pfizer_multiplier,
                                               moderna_multiplier=moderna_multiplier,
-                                              az_multiplier=az_multiplier)
+                                              az_multiplier=az_multiplier,
+                                              weekly_delivery_per_vaccine=vaccine_deliveries)
         second_shots_delivered = min(int(second_shot_portion * shots_for_today), needs_second_shot)
         first_shots_delivered = shots_for_today - second_shots_delivered
         sum_vaccinated += first_shots_delivered
