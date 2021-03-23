@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple, Optional, Any
 
 from fetch_data import fetch_vaccination_data
 from models import Target, first_doses_first, WeeklyDeliveryDate, _far_future
-from models import current_usage, shots_for_all, third_dosage, targets, facts, no_az_usage
+from models import current_usage, shots_for_all, third_dosage, facts, no_az_usage
 from dateutil.parser import parse
 
 from vaccination_forecast import forecast
@@ -115,6 +115,7 @@ def forecast_for_models(forecast_length: int, models: List[Dict[str, Any]]) -> T
     ]
     timeseries: Dict[str, List[float]] = {}
     dates: List[datetime] = []
+    from models import targets
     for param, deliveries in models_and_deliveries:
         forecasted_data = forecast(forecast_length, facts["population"]["all"], data, second_shot_portion=0.5,
                                    second_shot_interval=param["second_dose"], pfizer_multiplier=param["pfizer"],
@@ -126,24 +127,35 @@ def forecast_for_models(forecast_length: int, models: List[Dict[str, Any]]) -> T
     return timeseries, dates, targets
 
 
-def main():
-    import argparse
-    parser = argparse.ArgumentParser(prog="Forecast generator")
-    parser.add_argument("--model", help="Models to use instead of the default models")
-    parser.add_argument("command", choices=["summary", "detail"])
-    args = parser.parse_args()
-    if args.model:
-        with open(args.model) as json_file:
+def run_main(command: str, model_file_name=None) -> None:
+    if model_file_name:
+        with open(model_file_name) as json_file:
             import json
             models_as_dict = json.load(json_file)
         timeseries, dates, targets = forecast_for_models(400, models_as_dict)
     else:
         timeseries, dates, targets = fetch_data_for_main(400)
 
-    if args.command == "summary":
+    if command == "summary":
         print_summary(timeseries, dates, targets)
-    elif args.command == "detail":
+    elif command == "detail":
         print_detail(timeseries, dates)
+    elif command == "plot":
+        import os
+        from plot_forecasts import plot_results, plot_days_until_target
+        os.makedirs("out", exist_ok=True)
+        target_list = [(x.name, x.value) for x in targets]
+        plot_results(timeseries, dates, target_list).savefig("out/tmp.png", dpi=200)
+        plot_days_until_target(timeseries, dates, target_list).savefig("out/tmp_2.png", dpi=200)
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(prog="Forecast generator")
+    parser.add_argument("--model", help="Models to use instead of the default models", default=None)
+    parser.add_argument("command", choices=["summary", "detail", "plot"])
+    args = parser.parse_args()
+    run_main(args.command, args.model)
 
 
 if __name__ == "__main__":
