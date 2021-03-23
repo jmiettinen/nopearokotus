@@ -6,7 +6,7 @@ no_az_usage = {
     "pfizer": 1,
     "moderna": 1,
     "az": 0,
-    "second_dose": 90
+    "second_dose": 84
 }
 
 current_usage = {
@@ -14,7 +14,7 @@ current_usage = {
     "pfizer": 1,
     "moderna": 1,
     "az": 1,
-    "second_dose": 90
+    "second_dose": 84
 }
 
 first_doses_first = {
