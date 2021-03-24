@@ -9,7 +9,7 @@ import seaborn as sns
 from dateutil.rrule import MO as MONDAY
 from seaborn import FacetGrid
 
-from generate_forecasts import fetch_data_for_main, run_main
+from generate_forecasts import run_main
 
 
 def find_first_data_point_after(data: List[float], target: float) -> Optional[int]:

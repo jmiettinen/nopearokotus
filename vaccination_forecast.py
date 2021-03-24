@@ -1,18 +1,16 @@
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from dateutil.parser import parse
-
 from fetch_data import VaccinationRecord, fetch_vaccination_data
-from models import WeeklyDeliveryDate, weekly_delivery_per_vaccine
+from models import WeeklyDeliveryDate, weekly_delivery_per_vaccine as hardcode_weekly_delivery_per_vaccine
 
 
 def dosage_for_day(day: datetime, weekly_delivery_per_vaccine: Dict[str, List[WeeklyDeliveryDate]]) -> Dict[str, int]:
     dosage = {
         "pfizer": 0,
         "moderna": 0,
-        "az": 0
+        "az": 0,
+        "j&j": 0
     }
     k: str
     v: List[WeeklyDeliveryDate]
@@ -25,7 +23,8 @@ def dosage_for_day(day: datetime, weekly_delivery_per_vaccine: Dict[str, List[We
     return dosage
 
 
-def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplier: int, az_multiplier: int, weekly_delivery_per_vaccine: Dict[str, List[WeeklyDeliveryDate]]) -> int:
+def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplier: int, az_multiplier: int,
+                        weekly_delivery_per_vaccine: Dict[str, List[WeeklyDeliveryDate]]) -> int:
     dosage: Dict[str, int] = dosage_for_day(day, weekly_delivery_per_vaccine)
     total = 0
     for k, v in dosage.items():
@@ -36,7 +35,7 @@ def total_shots_for_day(day: datetime, pfizer_multiplier: int, moderna_multiplie
         elif k == "az":
             total += az_multiplier * v
         else:
-            total += 1
+            total += v
     return int(total)
 
 
@@ -94,7 +93,7 @@ def forecast(days_to_forecast: int, total_population: int, vaccinated: List[Vacc
     forecast_data: List[VaccinationRecord] = [data[-1]]
     history_shots_offset = len(first_shot_only)
     if vaccine_deliveries is None:
-        vaccine_deliveries = weekly_delivery_per_vaccine
+        vaccine_deliveries = hardcode_weekly_delivery_per_vaccine
 
     for x in range(1, days_to_forecast + 1, 1):
         today = last_date + timedelta(days=x)

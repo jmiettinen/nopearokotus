@@ -9,7 +9,8 @@ no_az_usage = {
     "pfizer": 1,
     "moderna": 1,
     "az": 0,
-    "second_dose": 84
+    "second_dose": 84,
+    "second_dose_proportion": 0.5
 }
 
 current_usage = {
@@ -17,7 +18,8 @@ current_usage = {
     "pfizer": 1,
     "moderna": 1,
     "az": 1,
-    "second_dose": 84
+    "second_dose": 84,
+    "second_dose_proportion": 0.5
 }
 
 first_doses_first = {
@@ -25,7 +27,8 @@ first_doses_first = {
     "pfizer": 1,
     "moderna": 1,
     "az": 1,
-    "second_dose": 180
+    "second_dose": 180,
+    "second_dose_proportion": 0
 }
 
 # smaller_dosage = {
@@ -41,7 +44,8 @@ third_dosage = {
     "pfizer": 3,
     "moderna": 2,
     "az": 1,
-    "second_dose": 180
+    "second_dose": 180,
+    "second_dose_proportion": 0.5
 }
 
 shots_for_all = {
@@ -49,7 +53,8 @@ shots_for_all = {
     "pfizer": 30,
     "moderna": 2,
     "az": 1,
-    "second_dose": 180
+    "second_dose": 180,
+    "second_dose_proportion": 0.5
 }
 
 facts = {

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Dict, List, Tuple, Optional, Any
 
 from fetch_data import fetch_vaccination_data
-from models import Target, first_doses_first, WeeklyDeliveryDate, _far_future
+from models import Target, first_doses_first, WeeklyDeliveryDate, _far_future, targets as hard_coded_targets
 from models import current_usage, shots_for_all, third_dosage, facts, no_az_usage
 from dateutil.parser import parse
 
@@ -27,7 +27,7 @@ def fetch_data_for_main(forecast_length: int = 270, parameters=(
                                    moderna_multiplier=param["moderna"], az_multiplier=param["az"])
         timeseries[param["name"]] = [float(x.amount) for x in forecasted_data]
         dates = [x.date for x in forecasted_data]
-    return timeseries, dates, targets
+    return timeseries, dates, hard_coded_targets
 
 
 def find_target_date(vaccinated: List[float], target: int, dates: List[datetime]) -> Optional[datetime]:
@@ -117,7 +117,9 @@ def forecast_for_models(forecast_length: int, models: List[Dict[str, Any]]) -> T
     dates: List[datetime] = []
     from models import targets
     for param, deliveries in models_and_deliveries:
-        forecasted_data = forecast(forecast_length, facts["population"]["all"], data, second_shot_portion=0.5,
+        second_shot_portion = param.get("second_dose_proportion", 0.5)
+        forecasted_data = forecast(forecast_length, facts["population"]["all"], data,
+                                   second_shot_portion=second_shot_portion,
                                    second_shot_interval=param["second_dose"], pfizer_multiplier=param["pfizer"],
                                    moderna_multiplier=param["moderna"], az_multiplier=param["az"],
                                    vaccine_deliveries=deliveries)

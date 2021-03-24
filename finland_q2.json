@@ -1,12 +1,12 @@
 [
   {
-    "name": "First doses first",
+    "name": "FDF",
     "parameters": {
       "pfizer": 1,
       "moderna": 1,
       "az": 1,
       "second_dose": 180,
-      "second_dose_proportion": 0.5
+      "second_dose_proportion": 0
     },
     "deliveries": [
       {
@@ -34,6 +34,11 @@
         "name": "az",
         "start": "2021-04-01",
         "rate": 66000
+      },
+      {
+        "name": "j&j",
+        "start": "2021-04-19",
+        "rate": 61500
       }
     ]
   },
@@ -72,11 +77,102 @@
         "name": "az",
         "start": "2021-04-01",
         "rate": 66000
+      },
+      {
+        "name": "j&j",
+        "start": "2021-04-19",
+        "rate": 61500
+      }
+    ]
+  },
+    {
+    "name": "THL toive",
+    "parameters": {
+      "pfizer": 1,
+      "moderna": 1,
+      "az": 1,
+      "second_dose": 84,
+      "second_dose_proportion": 1
+    },
+    "deliveries": [
+      {
+        "name": "pfizer",
+        "start": "2021-03-01",
+        "end": "2021-03-31",
+        "rate": 60000
+      },
+      {
+        "name": "pfizer",
+        "start": "2021-04-01",
+        "rate": 307692
+      },
+      {
+        "name": "moderna",
+        "start": "2021-03-01",
+        "rate": 10000
+      },
+      {
+        "name": "az",
+        "start": "2021-03-01",
+        "rate": 40000
+      },
+      {
+        "name": "az",
+        "start": "2021-04-01",
+        "rate": 66000
+      },
+      {
+        "name": "j&j",
+        "start": "2021-04-19",
+        "rate": 61500
+      }
+    ]
+  },
+      {
+    "name": "THL toive FDF",
+    "parameters": {
+      "pfizer": 1,
+      "moderna": 1,
+      "az": 1,
+      "second_dose": 84,
+      "second_dose_proportion": 0
+    },
+    "deliveries": [
+      {
+        "name": "pfizer",
+        "start": "2021-03-01",
+        "end": "2021-03-31",
+        "rate": 60000
+      },
+      {
+        "name": "pfizer",
+        "start": "2021-04-01",
+        "rate": 307692
+      },
+      {
+        "name": "moderna",
+        "start": "2021-03-01",
+        "rate": 10000
+      },
+      {
+        "name": "az",
+        "start": "2021-03-01",
+        "rate": 40000
+      },
+      {
+        "name": "az",
+        "start": "2021-04-01",
+        "rate": 66000
+      },
+      {
+        "name": "j&j",
+        "start": "2021-04-19",
+        "rate": 61500
       }
     ]
   },
   {
-    "name": "Nykyinen malli ilman AZ",
+    "name": "Nykyinen ilman AZ",
     "parameters": {
       "pfizer": 1,
       "moderna": 1,
@@ -110,6 +206,11 @@
         "name": "az",
         "start": "2021-04-01",
         "rate": 66000
+      },
+      {
+        "name": "j&j",
+        "start": "2021-04-19",
+        "rate": 61500
       }
     ]
   }
